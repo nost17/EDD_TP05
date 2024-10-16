@@ -16,6 +16,12 @@ public class Empleado {
         this.ingreso = ingreso;
     }
 
+    public Empleado(String nombre, int legajo, int dni) {
+        this.nombre = nombre;
+        this.legajo = legajo;
+        this.dni = dni;
+    }
+
     public int getDni() {
         return dni;
     }
