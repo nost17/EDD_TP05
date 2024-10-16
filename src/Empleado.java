@@ -4,16 +4,16 @@ public class Empleado {
     private int dni;
     private int legajo;
     private String nombre;
-    private LocalDate ingreso;
+    private LocalDate fechaNacimiento;
 
     public Empleado() {
     }
 
-    public Empleado(String nombre, int legajo, int dni, LocalDate ingreso) {
+    public Empleado(String nombre, int legajo, int dni, LocalDate fechaNacimiento) {
         this.nombre = nombre;
         this.legajo = legajo;
         this.dni = dni;
-        this.ingreso = ingreso;
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     public Empleado(String nombre, int legajo, int dni) {
@@ -46,12 +46,12 @@ public class Empleado {
         this.nombre = nombre;
     }
 
-    public LocalDate getIngreso() {
-        return ingreso;
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
     }
 
-    public void setIngreso(LocalDate ingreso) {
-        this.ingreso = ingreso;
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Empleado {
         return "Empleado " + legajo + " { " +
                 "Dni: " + dni +
                 ", Nombre: '" + nombre + '\'' +
-                ", Ingreso: " + ingreso +
+                ", Nacimiento: " + fechaNacimiento +
                 " }";
     }
 }
