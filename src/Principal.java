@@ -8,7 +8,11 @@ public class Principal {
 
 
     public static void main(String[] args) {
-
+        /* TODO: Validar entrada de empleados
+         * Usar los metodos de busqueda para verificar que
+         * no exista otro empleado con el mismo legajo o dni
+         * en caso de que existan lanzar una excepcion `RuntimeExcepcion('mensaje')`
+         * */
     }
 
     private static ListaEnlazadaSimple<Empleado> getEmpleados() {
