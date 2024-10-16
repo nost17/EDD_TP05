@@ -5,15 +5,25 @@ public class Empleado {
     private int legajo;
     private String nombre;
     private LocalDate fechaNacimiento;
+    private String email;
 
     public Empleado() {
     }
 
-    public Empleado(String nombre, int legajo, int dni, LocalDate fechaNacimiento) {
+    public Empleado(String nombre, String email, int legajo, int dni, LocalDate fechaNacimiento) {
         this.nombre = nombre;
+        this.email = email;
         this.legajo = legajo;
         this.dni = dni;
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Empleado(String nombre, int legajo, int dni) {

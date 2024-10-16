@@ -10,14 +10,8 @@ public class Principal {
     static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-        /* TODO: Validar entrada de empleados
-         * Usar los metodos de busqueda para verificar que
-         * no exista otro empleado con el mismo legajo o dni
-         * en caso de que existan lanzar una excepcion `RuntimeExcepcion('mensaje')`
-         * */
 
-        imprimirLista(listaEmpleados);
-//        agregarEmpleado();
+
     }
 
     public static LocalDate fechasAleatorias() {
@@ -29,10 +23,11 @@ public class Principal {
 
     private static ListaEnlazadaSimple<Empleado> getEmpleados() {
 
-        Empleado empleado1 = new Empleado("Erick Cruz", 212, 12, fechasAleatorias());
-        Empleado empleado2 = new Empleado("Acosta Gloss", 122, 222, fechasAleatorias());
-        Empleado empleado3 = new Empleado("Gonza Carillo", 321, 4444, fechasAleatorias());
-        Empleado empleado4 = new Empleado("Brian Cruz", 444, 5555, fechasAleatorias());
+        Empleado empleado1 = new Empleado("Erick Cruz", "", 212, 12, fechasAleatorias());
+        Empleado empleado2 = new Empleado("Acosta Gloss", "", 122, 222, fechasAleatorias());
+        Empleado empleado3 = new Empleado("Gonza Carillo", "", 321, 4444, fechasAleatorias());
+        Empleado empleado4 = new Empleado("Brian Cruz", "", 444, 5555, fechasAleatorias());
+        Empleado empleado5 = new Empleado("Erick Cruz", "", 511, 1152, fechasAleatorias());
 
         ListaEnlazadaSimple<Empleado> listaEmpleados = new ListaEnlazadaSimple<>();
 
@@ -40,6 +35,7 @@ public class Principal {
         listaEmpleados.addLast(empleado2);
         listaEmpleados.addLast(empleado3);
         listaEmpleados.addLast(empleado4);
+        listaEmpleados.addLast(empleado5);
         return listaEmpleados;
     }
 
@@ -84,6 +80,18 @@ public class Principal {
         return null;
     }
 
+    public static Empleado buscarEmpleadoPor(String correo, boolean remover) {
+        for (Empleado empleado : listaEmpleados) {
+            if (empleado.getEmail().equals(correo)) {
+                if (remover) {
+                    listaEmpleados.removeOf(empleado);
+                }
+                return empleado;
+            }
+        }
+        return null;
+    }
+
     public static void agregarEmpleado() {
         System.out.println("\n**** Agregar empleado ****");
         String nombre = Helper.validarStringNoVacio(input, "Ingrese nombre del empleado:");
@@ -97,12 +105,38 @@ public class Principal {
         if (buscarEmpleadoPor("dni", dni, false) != null) {
             throw new RuntimeException("Ya existe un empleado con el dni: '" + legajo + '\'');
         }
+        // E-mail
+        String correo = Helper.validarCorreoElectronico(input, "Ingrese e-mail del empleado");
+        if (!correo.isEmpty() && buscarEmpleadoPor(correo, false) != null) {
+            throw new RuntimeException("Ya existe un empleado con el e-mail: '" + correo + '\'');
+        }
 
         LocalDate fechaNacimiento = Helper.validarFecha(input, "Ingrese fecha de nacimiento", "dd/MM/yyyy");
 
-        listaEmpleados.addLast(new Empleado(nombre, legajo, dni, fechaNacimiento));
+        listaEmpleados.addLast(new Empleado(nombre, correo, legajo, dni, fechaNacimiento));
     }
 
+    public static Empleado removerEmpleadoPorSeleccion(ArrayList<Empleado> listaEncontrados) {
+        int cantidadEncontrados = listaEncontrados.size();
+
+        System.out.println("\n**** Remover empleado ****");
+
+        for (int i = 0; i < cantidadEncontrados; i++) {
+            Empleado empleado = listaEncontrados.get(i);
+            int indice = listaEncontrados.indexOf(empleado) + 1;
+            System.out.println(indice + ") " + empleado);
+        }
+        System.out.println("0) Ninguno");
+        int sel = Helper.validarEnteroEnRango(input, "Seleccione un empleado a remover", 0, cantidadEncontrados);
+
+        if (sel == 0) {
+            return null;
+        }
+
+        Empleado seleccion = listaEncontrados.get(sel - 1);
+        listaEmpleados.removeOf(seleccion);
+        return seleccion;
+    }
 
     public static void imprimirLista(ListaEnlazadaSimple<Empleado> empleados) {
         for (Empleado empleado : empleados) {

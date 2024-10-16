@@ -3,6 +3,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Helper {
 
@@ -120,6 +121,23 @@ public class Helper {
                 return valorIngresado;
             } else {
                 System.out.println("Error!!! El texto no puede estar vacío.");
+            }
+        }
+    }
+
+    // Método para validar un correo electrónico ingresado por el usuario
+    public static String validarCorreoElectronico(Scanner entrada, String mensaje) {
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(regex);
+        String correo;
+
+        while (true) {
+            System.out.println(mensaje);
+            correo = entrada.nextLine().trim();
+            if (correo.isEmpty() || pattern.matcher(correo).matches()) {
+                return correo;
+            } else {
+                System.out.println("Error!!! Debe ingresar un correo electrónico válido.");
             }
         }
     }
