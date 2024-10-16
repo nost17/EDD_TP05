@@ -187,6 +187,28 @@ public class ListaEnlazadaSimple<ELEMENT> implements ILinkedList<ELEMENT> {
 
     }
 
+    public void removeOf(ELEMENT search) {
+        if (this.count == 0) {
+            throw new RuntimeException("La lista está vacía...");
+        }
+
+        if (this.head.item.equals(search)) {
+            this.head = this.head.next;
+            --count;
+        } else if (this.head.next == null) {
+            this.head = this.tail = null;
+            --count;
+        } else {
+            Node<ELEMENT> skip = this.head;
+            Node<ELEMENT> prev;
+            do {
+                prev = skip;
+                skip = skip.next;
+            } while (!skip.item.equals(search));
+            prev.next = skip.next;
+            --count;
+        }
+    }
 
     //endregion
 
