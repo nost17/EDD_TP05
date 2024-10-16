@@ -1,6 +1,17 @@
+import java.time.LocalDate;
+import java.util.Iterator;
+import java.util.Scanner;
+
 public class Principal {
+
+    static ListaEnlazadaSimple<Empleado> listaEmpleados = getEmpleados();
+
+
     public static void main(String[] args) {
 
+    }
+
+    private static ListaEnlazadaSimple<Empleado> getEmpleados() {
         Empleado empleado1 = new Empleado("Erick Cruz", 212, 12);
         Empleado empleado2 = new Empleado("Acosta Gloss", 122, 222);
         Empleado empleado3 = new Empleado("Gonza Carillo", 321, 4444);
@@ -12,6 +23,43 @@ public class Principal {
         listaEmpleados.addLast(empleado2);
         listaEmpleados.addLast(empleado3);
         listaEmpleados.addLast(empleado4);
+        return listaEmpleados;
+    }
 
+    // TODO: Añadir busqueda por ingreso ´LocalTime´
+    public static Empleado buscarEmpleadoPor(String nombre, boolean remover) {
+        nombre = nombre.toLowerCase();
+        for (Empleado empleado : listaEmpleados) {
+            String nombreEmpleado = empleado.getNombre().toLowerCase();
+            if (nombreEmpleado.equals(nombre)) {
+                if (remover) {
+                    listaEmpleados.removeOf(empleado);
+                }
+                return empleado;
+            }
+        }
+        return null;
+    }
+
+    public static Empleado buscarEmpleadoPor(String tipo, int dato, boolean remover) {
+        for (Empleado empleado : listaEmpleados) {
+            int datoEmpleado = tipo.equals("dni") ? empleado.getDni() : empleado.getLegajo();
+
+            if (datoEmpleado == dato) {
+                if (remover) {
+                    listaEmpleados.removeOf(empleado);
+                }
+                return empleado;
+            }
+
+        }
+        return null;
+    }
+
+
+    public static void imprimirLista(ListaEnlazadaSimple<Empleado> empleados) {
+        for (Empleado empleado : empleados) {
+            System.out.println(empleado);
+        }
     }
 }
