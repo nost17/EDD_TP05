@@ -1,11 +1,10 @@
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.Scanner;
 
 public class Principal {
 
     static ListaEnlazadaSimple<Empleado> listaEmpleados = getEmpleados();
-
+    static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
         /* TODO: Validar entrada de empleados
