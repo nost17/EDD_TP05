@@ -60,10 +60,18 @@ public class Principal {
         return null;
     }
 
-
     public static void imprimirLista(ListaEnlazadaSimple<Empleado> empleados) {
         for (Empleado empleado : empleados) {
             System.out.println(empleado);
         }
+    }
+
+    public static void imprimirMenu() {
+        System.out.println("\n**** Gestor de empleados ****");
+        System.out.println("1) Agregar un empleado.");
+        System.out.println("2) Eliminar un empleado.");
+        System.out.println("3) Buscar un empleado.");
+        System.out.println("4) Mostrar todos los empleados.");
+        System.out.println("0) Salir.");
     }
 }
