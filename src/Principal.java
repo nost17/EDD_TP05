@@ -1,3 +1,5 @@
+import org.w3c.dom.html.HTMLLegendElement;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,7 +41,67 @@ public class Principal {
         return listaEmpleados;
     }
 
-    // TODO: Añadir busqueda por ingreso ´LocalTime´
+    public static ArrayList<Empleado> buscarEmpleado(String accion) {
+        String opcion = seleccionarAtributo(accion);
+        ArrayList<Empleado> paraRemover = new ArrayList<>();
+        if (opcion == null) {
+            return null;
+        }
+
+        System.out.println("\n**** Buscar empleado ****");
+
+        switch (opcion) {
+            case "nombre" -> {
+                String nombre = Helper.validarStringNoVacio(input, "Ingrese nombre del empleado a buscar");
+                ArrayList<Empleado> coincidencias = buscarEmpleadoPor(nombre);
+                if (coincidencias.isEmpty()) {
+                    throw new RuntimeException("No se encontraron coincidencias/el empleado no existe.");
+                }
+                System.out.println("**** Empleados encontrados ****");
+                imprimirListaEmpleados(coincidencias);
+                paraRemover = coincidencias;
+            }
+            case "dni" -> {
+                int dni = Helper.validarEntero(input, "Ingrese dni del empleado a buscar");
+                Empleado empleado = buscarEmpleadoPor("dni", dni, false);
+                if (empleado == null) {
+                    throw new RuntimeException("El empleado con dni '" + dni + "' no existe.");
+                }
+                System.out.println("El empleado buscado es: " + empleado);
+                paraRemover.add(empleado);
+            }
+            case "legajo" -> {
+                int legajo = Helper.validarEntero(input, "Ingrese legajo del empleado a buscar");
+                Empleado empleado = buscarEmpleadoPor("legajo", legajo, false);
+                if (empleado == null) {
+                    throw new RuntimeException("El empleado con legajo '" + legajo + "' no existe.");
+                }
+                System.out.println("El empleado buscado es: " + empleado);
+                paraRemover.add(empleado);
+            }
+            case "e-mail" -> {
+                String correo = Helper.validarStringNoVacio(input, "Ingrese legajo del empleado a buscar");
+                Empleado empleado = buscarEmpleadoPor(correo, false);
+                if (empleado == null) {
+                    throw new RuntimeException("El empleado con e-mail '" + correo + "' no existe.");
+                }
+                System.out.println("El empleado buscado es: " + empleado);
+                paraRemover.add(empleado);
+            }
+            case "fecha de nacimiento" -> {
+                LocalDate nacimiento = Helper.validarFecha(input, "Ingrese legajo del empleado a buscar", "dd/mm/yyyy");
+                ArrayList<Empleado> coincidencias = buscarEmpleadoPor(nacimiento);
+                if (coincidencias.isEmpty()) {
+                    throw new RuntimeException("No se encontraron coincidencias/el empleado no existe.");
+                }
+                System.out.println("**** Empleados encontrados ****");
+                imprimirListaEmpleados(coincidencias);
+                paraRemover = coincidencias;
+            }
+        }
+        return paraRemover;
+    }
+
     public static ArrayList<Empleado> buscarEmpleadoPor(String nombre) {
         ArrayList<Empleado> encontrados = new ArrayList<>();
         nombre = nombre.toLowerCase();
@@ -138,9 +200,39 @@ public class Principal {
         return seleccion;
     }
 
+    public static String seleccionarAtributo(String accion) {
+        String[] opciones = {"Nombre", "Dni", "Legajo", "E-mail", "Fecha de nacimiento"};
+
+        System.out.println("\n**** " + accion + " empleado por ****");
+        for (int i = 0; i < opciones.length; i++) {
+            System.out.println((i + 1) + ") " + opciones[i]);
+        }
+        System.out.println("0) Salir");
+
+        int opcion = Helper.validarEnteroEnRango(input, "Seleccione una opcion", 1, opciones.length);
+
+        if (opcion == 0) {
+            return null;
+        }
+
+        return opciones[opcion - 1].toLowerCase();
+
+    }
+
+    public static void ejecutarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> agregarEmpleado();
+            case 2 -> buscarEmpleado("");
+            case 3 -> buscarEmpleado("");
+            case 4 -> {
+                System.out.println("\n**** Lista de empleados ****");
+                imprimirListaEmpleados(listaEmpleados);
+            }
+        }
+    }
 
 
-    public static void imprimirLista(ListaEnlazadaSimple<Empleado> empleados) {
+    public static <E extends Iterable<Empleado>> void imprimirListaEmpleados(E empleados) {
         for (Empleado empleado : empleados) {
             System.out.println(empleado);
         }
