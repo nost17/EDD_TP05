@@ -13,7 +13,15 @@ public class Principal {
 
     public static void main(String[] args) {
 
-
+        while (true) {
+            imprimirMenu();
+            int opcion = Helper.validarEnteroEnRango(input, "Seleccione una opcion", 0, 4);
+            if (opcion == 0) {
+                System.out.println("Terminando programa...");
+                break;
+            }
+            ejecutarOpcion(opcion);
+        }
     }
 
     public static LocalDate fechasAleatorias() {
@@ -41,11 +49,10 @@ public class Principal {
         return listaEmpleados;
     }
 
-    public static ArrayList<Empleado> buscarEmpleado(String accion) {
+    public static void buscarEmpleado(String accion) {
         String opcion = seleccionarAtributo(accion);
-        ArrayList<Empleado> paraRemover = new ArrayList<>();
         if (opcion == null) {
-            return null;
+            return;
         }
 
         System.out.println("\n**** Buscar empleado ****");
@@ -59,7 +66,6 @@ public class Principal {
                 }
                 System.out.println("**** Empleados encontrados ****");
                 imprimirListaEmpleados(coincidencias);
-                paraRemover = coincidencias;
             }
             case "dni" -> {
                 int dni = Helper.validarEntero(input, "Ingrese dni del empleado a buscar");
@@ -68,7 +74,6 @@ public class Principal {
                     throw new RuntimeException("El empleado con dni '" + dni + "' no existe.");
                 }
                 System.out.println("El empleado buscado es: " + empleado);
-                paraRemover.add(empleado);
             }
             case "legajo" -> {
                 int legajo = Helper.validarEntero(input, "Ingrese legajo del empleado a buscar");
@@ -77,29 +82,28 @@ public class Principal {
                     throw new RuntimeException("El empleado con legajo '" + legajo + "' no existe.");
                 }
                 System.out.println("El empleado buscado es: " + empleado);
-                paraRemover.add(empleado);
             }
             case "e-mail" -> {
-                String correo = Helper.validarStringNoVacio(input, "Ingrese legajo del empleado a buscar");
+                String correo = Helper.validarCorreoElectronico(input, "Ingrese correo del empleado a buscar");
+                if (correo.isEmpty()) {
+                    throw new RuntimeException("Correo no valido");
+                }
                 Empleado empleado = buscarEmpleadoPor(correo, false);
                 if (empleado == null) {
                     throw new RuntimeException("El empleado con e-mail '" + correo + "' no existe.");
                 }
                 System.out.println("El empleado buscado es: " + empleado);
-                paraRemover.add(empleado);
             }
             case "fecha de nacimiento" -> {
-                LocalDate nacimiento = Helper.validarFecha(input, "Ingrese legajo del empleado a buscar", "dd/mm/yyyy");
+                LocalDate nacimiento = Helper.validarFecha(input, "Ingrese nacimiento del empleado a buscar", "dd/MM/yyyy");
                 ArrayList<Empleado> coincidencias = buscarEmpleadoPor(nacimiento);
                 if (coincidencias.isEmpty()) {
                     throw new RuntimeException("No se encontraron coincidencias/el empleado no existe.");
                 }
                 System.out.println("**** Empleados encontrados ****");
                 imprimirListaEmpleados(coincidencias);
-                paraRemover = coincidencias;
             }
         }
-        return paraRemover;
     }
 
     public static ArrayList<Empleado> buscarEmpleadoPor(String nombre) {
@@ -158,25 +162,92 @@ public class Principal {
         System.out.println("\n**** Agregar empleado ****");
         String nombre = Helper.validarStringNoVacio(input, "Ingrese nombre del empleado:");
         // Legajo
-        int legajo = Helper.validarEntero(input, "Ingrese legajo para el empleado '" + nombre + '\'');
-        if (buscarEmpleadoPor("legajo", legajo, false) != null) {
-            throw new RuntimeException("Ya existe un empleado con el legajo: '" + legajo + '\'');
+        int legajo;
+        while (true) {
+            legajo = Helper.validarEntero(input, "Ingrese legajo para el empleado '" + nombre + '\'');
+            if (buscarEmpleadoPor("legajo", legajo, false) == null) {
+                break;
+            }
+            System.out.println("Ya existe un empleado con el legajo: '" + legajo + '\'');
         }
         // Dni
-        int dni = Helper.validarEntero(input, "Ingrese dni para el empleado '" + nombre + '\'');
-        if (buscarEmpleadoPor("dni", dni, false) != null) {
-            throw new RuntimeException("Ya existe un empleado con el dni: '" + legajo + '\'');
+        int dni;
+        while (true) {
+            dni = Helper.validarEntero(input, "Ingrese dni para el empleado '" + nombre + '\'');
+            if (buscarEmpleadoPor("dni", dni, false) == null) {
+                break;
+            }
+            System.out.println("Ya existe un empleado con el dni: '" + legajo + '\'');
+
         }
         // E-mail
-        String correo = Helper.validarCorreoElectronico(input, "Ingrese e-mail del empleado");
-        if (!correo.isEmpty() && buscarEmpleadoPor(correo, false) != null) {
-            throw new RuntimeException("Ya existe un empleado con el e-mail: '" + correo + '\'');
+        String correo;
+        while (true) {
+            correo = Helper.validarCorreoElectronico(input, "Ingrese e-mail del empleado");
+            if (correo.isEmpty() || buscarEmpleadoPor(correo, false) == null) {
+                break;
+            }
+            System.out.println("Ya existe un empleado con el e-mail: '" + correo + '\'');
         }
 
         LocalDate fechaNacimiento = Helper.validarFecha(input, "Ingrese fecha de nacimiento", "dd/MM/yyyy");
 
         listaEmpleados.addLast(new Empleado(nombre, correo, legajo, dni, fechaNacimiento));
     }
+
+    public static void removerEmpleado(String accion) {
+        String opcion = seleccionarAtributo(accion);
+        if (opcion == null) {
+            return;
+        }
+
+        switch (opcion) {
+            case "nombre" -> {
+                String nombre = Helper.validarStringNoVacio(input, "Ingrese nombre del empleado a buscar");
+                ArrayList<Empleado> coincidencias = buscarEmpleadoPor(nombre);
+                if (coincidencias.isEmpty()) {
+                    throw new RuntimeException("No se encontraron coincidencias/el empleado no existe.");
+                }
+                System.out.println(removerEmpleadoPorSeleccion(coincidencias));
+            }
+            case "dni" -> {
+                int dni = Helper.validarEntero(input, "Ingrese dni del empleado a remover");
+                Empleado empleado = buscarEmpleadoPor("dni", dni, true);
+                if (empleado == null) {
+                    throw new RuntimeException("El empleado con dni '" + dni + "' no existe.");
+                }
+                System.out.println("Se removio el " + empleado);
+            }
+            case "legajo" -> {
+                int legajo = Helper.validarEntero(input, "Ingrese legajo del empleado a remover");
+                Empleado empleado = buscarEmpleadoPor("legajo", legajo, true);
+                if (empleado == null) {
+                    throw new RuntimeException("El empleado con legajo '" + legajo + "' no existe.");
+                }
+                System.out.println("Se removio el " + empleado);
+            }
+            case "e-mail" -> {
+                String correo = Helper.validarCorreoElectronico(input, "Ingrese correo del empleado a remover");
+                if (correo.isEmpty()) {
+                    throw new RuntimeException("Correo no valido");
+                }
+                Empleado empleado = buscarEmpleadoPor(correo, true);
+                if (empleado == null) {
+                    throw new RuntimeException("El empleado con e-mail '" + correo + "' no existe.");
+                }
+                System.out.println("Se removio el " + empleado);
+            }
+            case "fecha de nacimiento" -> {
+                LocalDate nacimiento = Helper.validarFecha(input, "Ingrese nacimiento del empleado a remover", "dd/MM/yyyy");
+                ArrayList<Empleado> coincidencias = buscarEmpleadoPor(nacimiento);
+                if (coincidencias.isEmpty()) {
+                    throw new RuntimeException("No se encontraron coincidencias/el empleado no existe.");
+                }
+                System.out.println(removerEmpleadoPorSeleccion(coincidencias));
+            }
+        }
+    }
+
 
     public static Empleado removerEmpleadoPorSeleccion(ArrayList<Empleado> listaEncontrados) {
         int cantidadEncontrados = listaEncontrados.size();
@@ -192,7 +263,7 @@ public class Principal {
         int sel = Helper.validarEnteroEnRango(input, "Seleccione un empleado a remover", 0, cantidadEncontrados);
 
         if (sel == 0) {
-            return null;
+            throw new RuntimeException("Ninguna seleccion.");
         }
 
         Empleado seleccion = listaEncontrados.get(sel - 1);
@@ -222,8 +293,20 @@ public class Principal {
     public static void ejecutarOpcion(int opcion) {
         switch (opcion) {
             case 1 -> agregarEmpleado();
-            case 2 -> buscarEmpleado("");
-            case 3 -> buscarEmpleado("");
+            case 2 -> {
+                try {
+                    removerEmpleado("Remover");
+                } catch (RuntimeException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            case 3 -> {
+                try {
+                    buscarEmpleado("Buscar");
+                } catch (RuntimeException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
             case 4 -> {
                 System.out.println("\n**** Lista de empleados ****");
                 imprimirListaEmpleados(listaEmpleados);
