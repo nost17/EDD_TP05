@@ -70,6 +70,7 @@ public class Empleado {
                 "Dni: " + dni +
                 ", Nombre: '" + nombre + '\'' +
                 ", Nacimiento: " + fechaNacimiento +
+				", E-mail: " + email + 
                 " }";
     }
 }

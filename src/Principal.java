@@ -33,11 +33,11 @@ public class Principal {
 
     private static ListaEnlazadaSimple<Empleado> getEmpleados() {
 
-        Empleado empleado1 = new Empleado("Erick Cruz", "ejemplo1@mail.com", 212, 12, fechasAleatorias());
-        Empleado empleado2 = new Empleado("Acosta Gloss", "ejemplo2@mail.com", 122, 222, fechasAleatorias());
-        Empleado empleado3 = new Empleado("Gonza Carillo", "ejemplo3@mail.com", 321, 4444, fechasAleatorias());
-        Empleado empleado4 = new Empleado("Brian Cruz", "ejemplo4@mail.com", 444, 5555, fechasAleatorias());
-        Empleado empleado5 = new Empleado("Erick Cruz", "ejemplo5@mail.com", 511, 1152, fechasAleatorias());
+        Empleado empleado1 = new Empleado("Cruz Erick", "ejemplo1@mail.com", 212, 12, fechasAleatorias());
+        Empleado empleado2 = new Empleado("Cruz Nestor", "ejemplo2@mail.com", 122, 222, fechasAleatorias());
+        Empleado empleado3 = new Empleado("Gloss Maximo", "ejemplo3@mail.com", 321, 4444, fechasAleatorias());
+        Empleado empleado4 = new Empleado("Ramos Franco", "ejemplo4@mail.com", 444, 5555, fechasAleatorias());
+        Empleado empleado5 = new Empleado("Mendoza Gonzalo", "ejemplo5@mail.com", 511, 1152, fechasAleatorias());
 
         ListaEnlazadaSimple<Empleado> listaEmpleados = new ListaEnlazadaSimple<>();
 
